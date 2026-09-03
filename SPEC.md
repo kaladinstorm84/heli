@@ -1,7 +1,9 @@
 # SPEC.md — Desert Strike Spiritual Successor
 ### Open-World Helicopter Rescue / Logistics / Combat Sim
-**Status:** Design spec v2.1 — intended as a development/prompting reference document
+**Status:** Design spec v2.2 — intended as a development/prompting reference document
 
+> **v2.2 addition:** the repair race — China's relief mission also repairs infrastructure and earns regional legitimacy for it. Repairable nodes are contested: whoever supplies a repair claims its legitimacy and its systemic payoff, and Chinese-rebuilt infrastructure is the delivery vector for the fortification twist. See Sections 5–6.
+>
 > **v2.1 addition:** infrastructure repair ("assist") mechanic — SnowRunner-flavored haulage of repair materials to broken bridges/roads, which reopens ground convoy routes, reduces standing airlift demand, and banks regional legitimacy. See Section 5.
 >
 > **v2.0 premise change:** the campaign no longer opens as a covert military intervention. Nepal has been struck by a massive earthquake; the Quad and China both arrive as disaster-relief partners, and the campaign escalates from cooperative humanitarian operations into confrontation when China is discovered fortifying the towns it is "rebuilding." The mechanical spine of v1.0 (fuel/FARP logistics, regional legitimacy, isometric camera, command layer, five-stage escalation) is retained — the disaster framing strengthens rather than replaces it.
@@ -113,8 +115,12 @@ Deliberately SnowRunner-flavored: the world is full of broken infrastructure, an
   - Settlements reconnected by ground become cheaper to serve — standing airlift demand drops, freeing the player's lift capacity for the next problem. This is the core loop: **fly the hard version until you've earned the easy version.**
   - FARP/aid-hub resupply can automate along repaired routes instead of depending on player trips.
   - Repairs bank **regional legitimacy** like other relief work — and a repaired bridge is a visible, persistent monument to it, on-theme with the cruise-silhouette LOD tier (a rebuilt bridge should read at far zoom).
+- **The repair race (v2.2): China repairs too.** Repairable nodes are contested opportunities, not a player-exclusive to-do list. China's relief mission works its own repair queue, and a node China completes:
+  - banks **Chinese** regional legitimacy in that region (see Section 6) — visibly, with Chinese crews, signage, and ribbon-cutting optics;
+  - reopens the route for everyone, but oriented to Chinese logistics — and later stages reveal the sting: **Chinese-rebuilt infrastructure is the delivery vector for fortification.** The premise's "towns China rebuilt" arrive garrisoned because China rebuilt the roads and bridges into them. Every node the player concedes in Stage 2 is potential enemy infrastructure in Stage 4.
+  - This converts repair from a side activity into the aid race's scoreboard: the player cannot fix everything (lift capacity is finite), so *which* nodes to win — and which to knowingly concede to China — becomes a strategic choice with a long fuse.
 - **Late-game edge:** infrastructure the player repaired is real terrain that everyone can use. Chinese forces can advance over a player-rebuilt bridge; armed groups can cut a repaired route the player's logistics now lean on. Defending — or in the worst case, re-dropping — a bridge the player personally restored is a deliberately available dramatic beat, and keeps repair from being a purely safe investment.
-- **Data flag recommendation:** repairable nodes mirror the forward-base pattern — `repair_state` (damaged / supplied / repaired), material requirements, and the systemic effects unlocked per state (convoy routes, demand reductions). Plot-critical repairs (if any) use the same `plot_critical: bool` convention as bases.
+- **Data flag recommendation:** repairable nodes mirror the forward-base pattern — `repair_state` (damaged / supplied / repaired), `repaired_by` (player / China / none), material requirements, and the systemic effects unlocked per state and owner (convoy routes, demand reductions, legitimacy attribution, late-game fortification eligibility). Plot-critical repairs (if any) use the same `plot_critical: bool` convention as bases.
 
 ---
 
@@ -122,7 +128,7 @@ Deliberately SnowRunner-flavored: the world is full of broken infrastructure, an
 
 - **Tracked regionally** (valley/settlement level), not globally. What happens in one area does not affect the player elsewhere, but does change that region's future patrol density, hostility, intel quality, and mission availability.
 - **Legitimacy is now two-directional (v2.0):** relief performance — rescues completed, aid delivered, hubs established — *builds* regional legitimacy; collateral damage and visible militarization *spend* it. The early campaign is where the player banks the goodwill the late campaign will burn.
-- **China competes for the same resource.** Regions can trust the Chinese relief mission more than the Quad. The "aid race" of the cooperative stages is the legitimacy war's opening moves, before a shot is fired — and after the turn, a region that trusts China is harder to operate in: worse intel, more reporting of Quad movements, political cover for Chinese fortification.
+- **China competes for the same resource — actively.** The Chinese relief mission runs its own rescues, aid deliveries, and **infrastructure repairs** (see Section 5, the repair race), each banking Chinese legitimacy in the region where it happens. Regions can end up trusting the Chinese relief mission more than the Quad. The "aid race" of the cooperative stages is the legitimacy war's opening moves, before a shot is fired — and after the turn, a region that trusts China is harder to operate in: worse intel, more reporting of Quad movements, political cover for Chinese fortification. A region whose bridge China rebuilt does not read Chinese trucks on it as a threat — which is exactly the problem.
 - **High regional collateral (or abandoned/failed relief) raises local armed-group activity** — a third faction, distinct from Chinese forces and the Nepali government, born of desperation and grievance in a disaster zone, that the player did not choose to fight.
 - **Armed groups primarily degrade player logistics**, not just add combat volume: sabotage and looting of the FARP/aid-hub network, harassed supply routes, drying up local intel — ties consequences directly back into the fuel/logistics system rather than just spawning more enemies.
 - **China benefits passively.** Chinese-aligned information operations can amplify a bad Quad engagement — or a failed relief promise — into a strategic loss without China needing to act directly.
@@ -146,7 +152,7 @@ Each stage changes what's *mechanically available*, not just what's narratively 
 - Logistics missions: cargo weight cuts into range; aid demand outstrips lift capacity, forcing triage.
 - Player physically builds the FARP/aid-hub network relied on later — the "boring" relief infrastructure that becomes the war's operational backbone.
 - **Infrastructure repair unlocks here** (see Section 5): airlifting materials to broken bridges and blocked roads reopens ground convoy routes, converting the player's hand-flown supply legs into automated ground logistics — the stage's core investment decision (serve demand now vs. repair the route that removes the demand).
-- Legitimacy banking is at its cheapest here; the aid race with China's relief mission runs in the background.
+- **The repair race is this stage's visible competition:** Chinese crews work their own repair queue, and nodes the player doesn't win get rebuilt — and credited — by China. Legitimacy banking is at its cheapest here, and so is quietly losing it: what reads as friendly rivalry in Stage 2 is retroactively revealed as positioning in Stage 3.
 
 ### Stage 3 — The Turn (Suspicion & Shadow Recon → First Skirmishes)
 - Reports surface of Chinese fortification in towns under Chinese reconstruction. Tasking quietly shifts: recon of fortified sites flown under relief cover, intel gathering, shadowing Chinese convoys.
@@ -218,7 +224,7 @@ Each step introduces exactly one new system before combining them. All three now
 |---|---|
 | Quad Joint Task Force | Player faction. Multinational asset/doctrine variety by member nation. Arrives with a humanitarian mandate; acquires quiet military teeth as the campaign turns. Its legitimacy is its permission to stay. |
 | Nepali Government | Host nation, disaster-struck and dependent on both relief missions. Domestic support is a tracked variable responsive to player conduct — aid record first, restraint record later. |
-| Chinese Relief Mission / PLA | Begins as a genuine, effective relief partner; revealed to be fortifying reconstructed towns. Escalates in parallel with campaign stages from co-operator to primary antagonist. Information operations run throughout. |
+| Chinese Relief Mission / PLA | Begins as a genuine, effective relief partner running its own rescues, aid deliveries, and infrastructure repairs — competing for the same regional legitimacy as the player. Revealed to be fortifying the towns and routes it rebuilt. Escalates in parallel with campaign stages from co-operator to primary antagonist. Information operations run throughout. |
 | Local Armed Groups | Emergent third faction triggered by regional collateral damage and failed/abandoned relief. Not aligned with China — a consequence of player conduct and disaster desperation, not a scripted enemy. |
 
 ---
@@ -246,7 +252,8 @@ Each step introduces exactly one new system before combining them. All three now
 - [ ] Local armed groups: passive modifier vs. full independent faction (recommend prototyping passive first)
 - [ ] Escalation pacing: player-driven vs. scripted (the Stage 3 fortification reveal itself likely scripted; everything downstream player-influenced)
 - [ ] Legitimacy accounting: how relief actions (rescues, aid delivered, hubs built) numerically bank legitimacy vs. how collateral spends it — one regional scalar or separate goodwill/hostility tracks?
-- [ ] The aid race: is Chinese relief performance per-region simulated (even crudely) or scripted per campaign beat?
+- [ ] The aid race: is Chinese relief/repair performance per-region simulated (even crudely — e.g. China completes N repair nodes per stage from a priority list, faster where uncontested) or scripted per campaign beat? Simulated makes conceding nodes a real decision; scripted is far cheaper and may be indistinguishable if node assignments are authored well
+- [ ] The repair race: can the player interfere with in-progress Chinese repairs (or vice versa) in Stages 3–4, and at what legitimacy cost? (Striking disaster-relief works is close to the maximum possible legitimacy self-harm — that may be exactly the point, or a door better left closed)
 - [ ] Joint-operations content in Stages 1–2: playable cooperative missions with Chinese aircraft, or ambient/narrative presence only? (Playable buys the betrayal more weight; ambient is far cheaper.)
 - [ ] Rescue mechanics depth: winch/hover interaction model, survivor representation, and how thin it can stay while still feeling like rescue
 - [ ] Infrastructure repair: delivery interaction (sling-load precision drop vs. land-and-unload vs. both by cargo type) — sling-load is the more SnowRunner-flavored skill expression but needs a physics rope; scope check required

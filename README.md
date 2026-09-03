@@ -8,7 +8,7 @@ An open-world, isometric helicopter rescue, logistics, and combat sim set in a r
 
 | Document | Purpose |
 |---|---|
-| [SPEC.md](SPEC.md) | Design spec v2.1 — the authoritative development/prompting reference: premise, geography and terrain pipeline, design pillars, camera/fuel/legitimacy systems, five-stage campaign, mission structure, command layer, factions, technical direction, and consolidated open questions. |
+| [SPEC.md](SPEC.md) | Design spec v2.2 — the authoritative development/prompting reference: premise, geography and terrain pipeline, design pillars, camera/fuel/legitimacy systems, five-stage campaign, mission structure, command layer, factions, technical direction, and consolidated open questions. |
 | [progress.md](progress.md) | Running progress log, updated with every change to allow tracking between chat/dev sessions. |
 
 ## Core Systems (see SPEC.md for detail)
@@ -16,6 +16,7 @@ An open-world, isometric helicopter rescue, logistics, and combat sim set in a r
 - **Fixed isometric camera** with automatic cruise zoom-out (target-value + continuous lerp, asymmetric easing).
 - **Fuel & logistics:** effort-based burn rate (altitude, load, hover, speed); player-built FARP/aid-hub network; relief cargo, ordnance, and auxiliary tanks compete for the same lift; running dry is recoverable ("stuck, not dead").
 - **Infrastructure repair ("assist"):** SnowRunner-flavored haulage — airlift heavy repair materials to broken bridges and blocked roads so crews can fix them; repairs reopen ground convoy routes, cut standing airlift demand, and bank regional legitimacy. Repaired routes are usable by everyone, including the enemy.
+- **The repair race:** China repairs infrastructure too, earning regional legitimacy for every node it completes — and Chinese-rebuilt routes are the delivery vector for the fortification twist. With finite lift capacity, choosing which repairs to win and which to concede to China is the aid race's scoreboard.
 - **Legitimacy & collateral:** tracked regionally, not globally, and two-directional — relief work banks legitimacy, collateral and visible militarization spend it; China competes for the same trust; failed aid or high collateral spawns local armed groups that degrade logistics; command-delegated damage counts the same as direct action.
 - **Five-stage escalation campaign:** Search & Rescue → Relief Logistics → The Turn (suspicion and first skirmishes) → Hostilities → Full-Blown War, each stage changing what is mechanically available. Relief tasking persists into the combat stages.
 - **Command layer:** waypoint system that grows from tutorial relief-convoy escorts into finale district-level attack/defend/hold orders.

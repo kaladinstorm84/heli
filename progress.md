@@ -2,6 +2,14 @@
 
 Running log of changes to allow progress tracking between chat/dev sessions. Newest entries first.
 
+## 2026-09-03 — Spec v2.2: the repair race (China repairs and earns legitimacy too)
+
+- Extended the repair mechanic in `SPEC.md` §5: repairable nodes are contested — China's relief mission works its own repair queue, and China-completed nodes bank Chinese regional legitimacy and reopen routes oriented to Chinese logistics.
+- Tied the race to the premise: Chinese-rebuilt infrastructure is the delivery vector for the fortification twist — towns arrive garrisoned because China rebuilt the routes into them. Conceding a node in Stage 2 can mean facing it as enemy infrastructure in Stage 4.
+- Ripple edits: §6 (China competes actively via rescues/aid/repairs; a region whose bridge China rebuilt doesn't read Chinese trucks as a threat), §7 Stage 2 (repair race as the stage's visible competition), §10 faction table, §12 (aid-race simulation question extended with a concrete cheap model; new question on interfering with in-progress Chinese repairs and its legitimacy cost).
+- Data flag: added `repaired_by` (player/China/none) with per-owner systemic effects incl. late-game fortification eligibility.
+- Updated `README.md` (spec version, repair-race bullet). Docs-only change; no build to run.
+
 ## 2026-09-03 — Spec v2.1: infrastructure repair ("assist") mechanic
 
 - Added an Infrastructure Repair subsection to `SPEC.md` §5: SnowRunner-flavored haulage of heavy repair materials to damaged infrastructure nodes (bridges, blocked roads, helipads); Nepali crews do the repair once supplied — player is the lifeline, not the builder.
@@ -35,7 +43,7 @@ Running log of changes to allow progress tracking between chat/dev sessions. New
 
 ## Current State
 
-- **Phase:** pre-production (design docs only), spec at v2.1 (disaster-relief premise + infrastructure repair mechanic).
+- **Phase:** pre-production (design docs only), spec at v2.2 (disaster-relief premise + contested infrastructure-repair race).
 - **Repo contents:** `SPEC.md`, `README.md`, `progress.md`, Unity `.gitignore`.
 - **Next candidate steps (not started):**
   - Resolve open questions in SPEC.md §12 (legitimacy accounting, escalation pacing, rescue mechanic depth, fuel-burn formula, finale scope, camera/command interaction rules).
