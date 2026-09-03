@@ -2,6 +2,14 @@
 
 Running log of changes to allow progress tracking between chat/dev sessions. Newest entries first.
 
+## 2026-09-03 — Spec v2.3: repair race pacing decided (progress-clocked, not wall-clocked)
+
+- Resolved the aid-race pacing question in `SPEC.md` §5/§12: China's repair queue must never advance on real time — an "X repairs per hour" model would punish exploration, careful flying, and side questing (pillar 1 violation).
+- Model: progress-clocked, pace-matched to the player. Primary clock = player repair completions (~1:1); floor clock = main-mission completions and stage transitions at lower weight (guarantees plot-critical Chinese-rebuilt/fortified infrastructure exists even for rush-the-plot players); everything else ticks China zero.
+- Presentation note added: pace-matching must not read as mirroring — hide the clock via queue ordering, spatial separation, and decoupled completion announcements.
+- §12 updated: pacing question marked decided; remaining tuning open (tick weights, uncontested-node speed, rubber-banding); new question on whether non-repair relief progress also ticks the queue.
+- Updated `README.md` (spec version, pacing note). Docs-only change; no build to run.
+
 ## 2026-09-03 — Spec v2.2: the repair race (China repairs and earns legitimacy too)
 
 - Extended the repair mechanic in `SPEC.md` §5: repairable nodes are contested — China's relief mission works its own repair queue, and China-completed nodes bank Chinese regional legitimacy and reopen routes oriented to Chinese logistics.
@@ -43,7 +51,7 @@ Running log of changes to allow progress tracking between chat/dev sessions. New
 
 ## Current State
 
-- **Phase:** pre-production (design docs only), spec at v2.2 (disaster-relief premise + contested infrastructure-repair race).
+- **Phase:** pre-production (design docs only), spec at v2.3 (disaster-relief premise + contested repair race with progress-clocked pacing).
 - **Repo contents:** `SPEC.md`, `README.md`, `progress.md`, Unity `.gitignore`.
 - **Next candidate steps (not started):**
   - Resolve open questions in SPEC.md §12 (legitimacy accounting, escalation pacing, rescue mechanic depth, fuel-burn formula, finale scope, camera/command interaction rules).

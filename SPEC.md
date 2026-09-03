@@ -1,7 +1,9 @@
 # SPEC.md — Desert Strike Spiritual Successor
 ### Open-World Helicopter Rescue / Logistics / Combat Sim
-**Status:** Design spec v2.2 — intended as a development/prompting reference document
+**Status:** Design spec v2.3 — intended as a development/prompting reference document
 
+> **v2.3 decision:** the repair race is progress-clocked, not wall-clocked — China's repair queue advances with the player's own repair/mission progress (roughly pace-matched), never with real time, so exploration, careful flying, and side quests are never taxed. See Section 5.
+>
 > **v2.2 addition:** the repair race — China's relief mission also repairs infrastructure and earns regional legitimacy for it. Repairable nodes are contested: whoever supplies a repair claims its legitimacy and its systemic payoff, and Chinese-rebuilt infrastructure is the delivery vector for the fortification twist. See Sections 5–6.
 >
 > **v2.1 addition:** infrastructure repair ("assist") mechanic — SnowRunner-flavored haulage of repair materials to broken bridges/roads, which reopens ground convoy routes, reduces standing airlift demand, and banks regional legitimacy. See Section 5.
@@ -119,6 +121,11 @@ Deliberately SnowRunner-flavored: the world is full of broken infrastructure, an
   - banks **Chinese** regional legitimacy in that region (see Section 6) — visibly, with Chinese crews, signage, and ribbon-cutting optics;
   - reopens the route for everyone, but oriented to Chinese logistics — and later stages reveal the sting: **Chinese-rebuilt infrastructure is the delivery vector for fortification.** The premise's "towns China rebuilt" arrive garrisoned because China rebuilt the roads and bridges into them. Every node the player concedes in Stage 2 is potential enemy infrastructure in Stage 4.
   - This converts repair from a side activity into the aid race's scoreboard: the player cannot fix everything (lift capacity is finite), so *which* nodes to win — and which to knowingly concede to China — becomes a strategic choice with a long fuse.
+- **Race pacing is progress-clocked, not wall-clocked (v2.3).** China's repair queue must never advance on real time — an "X repairs per hour" model would punish exploration, careful flying, and side questing, violating pillar 1 (scarcity is systemic, not punitive). Instead, China's queue advances on **player-progress ticks**, pace-matched to the player's own repair rate:
+  - Primary clock: the player completing a repair node advances China's current queue item by roughly one node — the race stays close by construction, and the choice space stays "*which* nodes do I win," never "can I out-grind the timer."
+  - Floor clock: main-mission completions and stage transitions also tick China's queue (at a lower weight), so a rush-the-plot player who ignores repair entirely still arrives in Stage 3–4 with the plot-critical Chinese-rebuilt (and fortified) infrastructure in place — the premise cannot be starved out by not playing the repair game.
+  - Time spent exploring, flying carefully, doing rescues, or running non-repair side missions advances China **zero**. The race only moves when the player moves it or the plot does.
+  - Presentation note: pace-matching must not read as mirroring (China visibly finishing a bridge the moment the player finishes theirs feels rigged). Hide the clock with queue ordering, spatial separation (China works its own sectors), and completion announcements decoupled from the player's delivery moments.
 - **Late-game edge:** infrastructure the player repaired is real terrain that everyone can use. Chinese forces can advance over a player-rebuilt bridge; armed groups can cut a repaired route the player's logistics now lean on. Defending — or in the worst case, re-dropping — a bridge the player personally restored is a deliberately available dramatic beat, and keeps repair from being a purely safe investment.
 - **Data flag recommendation:** repairable nodes mirror the forward-base pattern — `repair_state` (damaged / supplied / repaired), `repaired_by` (player / China / none), material requirements, and the systemic effects unlocked per state and owner (convoy routes, demand reductions, legitimacy attribution, late-game fortification eligibility). Plot-critical repairs (if any) use the same `plot_critical: bool` convention as bases.
 
@@ -252,7 +259,8 @@ Each step introduces exactly one new system before combining them. All three now
 - [ ] Local armed groups: passive modifier vs. full independent faction (recommend prototyping passive first)
 - [ ] Escalation pacing: player-driven vs. scripted (the Stage 3 fortification reveal itself likely scripted; everything downstream player-influenced)
 - [ ] Legitimacy accounting: how relief actions (rescues, aid delivered, hubs built) numerically bank legitimacy vs. how collateral spends it — one regional scalar or separate goodwill/hostility tracks?
-- [ ] The aid race: is Chinese relief/repair performance per-region simulated (even crudely — e.g. China completes N repair nodes per stage from a priority list, faster where uncontested) or scripted per campaign beat? Simulated makes conceding nodes a real decision; scripted is far cheaper and may be indistinguishable if node assignments are authored well
+- [x] ~~The aid race: wall-clock simulated vs. scripted~~ — **decided (v2.3): progress-clocked.** China's queue advances on player repair completions (primary) and mission/stage beats (floor), never real time. Remaining tuning open: exact tick weights, whether uncontested nodes tick faster, and any rubber-banding if the player is far ahead/behind
+- [ ] The repair race: does non-repair *relief* progress (rescue arcs, aid-hub establishment) also tick China's queue at low weight, or strictly repairs + plot beats? (Strictly repairs is cleaner; broader ticks make China feel less player-reactive)
 - [ ] The repair race: can the player interfere with in-progress Chinese repairs (or vice versa) in Stages 3–4, and at what legitimacy cost? (Striking disaster-relief works is close to the maximum possible legitimacy self-harm — that may be exactly the point, or a door better left closed)
 - [ ] Joint-operations content in Stages 1–2: playable cooperative missions with Chinese aircraft, or ambient/narrative presence only? (Playable buys the betrayal more weight; ambient is far cheaper.)
 - [ ] Rescue mechanics depth: winch/hover interaction model, survivor representation, and how thin it can stay while still feeling like rescue
