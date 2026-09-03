@@ -1,7 +1,9 @@
 # SPEC.md — Desert Strike Spiritual Successor
 ### Open-World Helicopter Rescue / Logistics / Combat Sim
-**Status:** Design spec v2.0 — intended as a development/prompting reference document
+**Status:** Design spec v2.1 — intended as a development/prompting reference document
 
+> **v2.1 addition:** infrastructure repair ("assist") mechanic — SnowRunner-flavored haulage of repair materials to broken bridges/roads, which reopens ground convoy routes, reduces standing airlift demand, and banks regional legitimacy. See Section 5.
+>
 > **v2.0 premise change:** the campaign no longer opens as a covert military intervention. Nepal has been struck by a massive earthquake; the Quad and China both arrive as disaster-relief partners, and the campaign escalates from cooperative humanitarian operations into confrontation when China is discovered fortifying the towns it is "rebuilding." The mechanical spine of v1.0 (fuel/FARP logistics, regional legitimacy, isometric camera, command layer, five-stage escalation) is retained — the disaster framing strengthens rather than replaces it.
 
 ---
@@ -52,7 +54,7 @@ Biome bands should follow real elevation contours and valley/ridge structure (Te
 - **North/high:** collapsed glacial lakes and moraine dams (GLOF sources), avalanche-buried passes — the origin points of the floods.
 - **Valley corridors (Teesta/Rangit):** flash-flood and mudslide damage concentrated along the rivers — destroyed bridges, washed-out roads, drowned low-lying settlements. The same valleys that were the natural travel corridors are now the damage corridors, which is exactly why ground logistics is dead and the player's helicopter matters.
 - **South/populated:** highest casualty and displacement concentration, mass shelter needs, highest political visibility.
-- Damage state should be **pre-authored and largely static** (a destroyed bridge is a destroyed bridge), not dynamically simulated — indie scope. Aftershocks/secondary floods, if used, are scripted mission events, not a simulation layer.
+- Damage state should be **pre-authored and largely static**, not dynamically simulated — indie scope. Aftershocks/secondary floods, if used, are scripted mission events, not a simulation layer. The exception is the designated set of **repairable infrastructure nodes** (see Section 5, Infrastructure Repair), which step through pre-authored damaged/repaired states when the player supplies them — discrete state swaps, still not simulation.
 
 **Terrain data pipeline:**
 - Source: SRTM (30m global) or Copernicus DEM (GLO-30, generally cleaner in mountainous terrain); ASTER GDEM as a gap-filler for SRTM voids in steep Himalayan terrain.
@@ -99,6 +101,21 @@ Biome bands should follow real elevation contours and valley/ridge structure (Te
 - **Cargo is now more than ordnance:** relief supplies, casualty evacuation, reconstruction materiel, and (later) weapons all compete for the same lift capacity. Auxiliary tanks remain a loadout choice trading cargo/ordnance capacity for range — scarcity becomes a build decision, not just a constraint.
 - **Running dry is recoverable, not a fail state:** forced auto-rotation landing → on-foot or awaiting rescue, rather than instant mission failure ("stuck, not dead," after SnowRunner).
 
+### Infrastructure Repair — the "Assist" Mechanic (v2.1)
+
+Deliberately SnowRunner-flavored: the world is full of broken infrastructure, and fixing it is a haulage problem the player opts into.
+
+- **Repairable nodes:** specific damaged infrastructure — bridges, landslide-blocked road segments, damaged helipads/airstrips, possibly power/comms relays — are marked as repairable, distinct from ambient (permanent, cosmetic) disaster damage.
+- **The player is the lifeline, not the builder.** Repair means airlifting the required materials (multiple heavy loads: girders, fuel for machinery, engineering stores) to the site; Nepali engineer crews or local workers do the actual repair once supplied. Keeps the fantasy helicopter-centric and the implementation thin — no construction minigame, the node flips through pre-authored damage states as deliveries land.
+- **Multi-trip commitment with SnowRunner texture:** repair loads are heavy and awkward — they cut range and handling (see effort-based burn), and delivery sites are the hard kind (a gorge bridgehead, a half-collapsed road shelf), making the approach and set-down the skill expression. Sling-load vs. land-and-unload is an open question below.
+- **The payoff is systemic, not cosmetic — repaired infrastructure reopens ground logistics:**
+  - Repaired bridges/roads enable or shorten **convoy routes** (the same waypoint/convoy system from the tutorial and command layer), letting ground transport take over supply legs the player was flying by hand.
+  - Settlements reconnected by ground become cheaper to serve — standing airlift demand drops, freeing the player's lift capacity for the next problem. This is the core loop: **fly the hard version until you've earned the easy version.**
+  - FARP/aid-hub resupply can automate along repaired routes instead of depending on player trips.
+  - Repairs bank **regional legitimacy** like other relief work — and a repaired bridge is a visible, persistent monument to it, on-theme with the cruise-silhouette LOD tier (a rebuilt bridge should read at far zoom).
+- **Late-game edge:** infrastructure the player repaired is real terrain that everyone can use. Chinese forces can advance over a player-rebuilt bridge; armed groups can cut a repaired route the player's logistics now lean on. Defending — or in the worst case, re-dropping — a bridge the player personally restored is a deliberately available dramatic beat, and keeps repair from being a purely safe investment.
+- **Data flag recommendation:** repairable nodes mirror the forward-base pattern — `repair_state` (damaged / supplied / repaired), material requirements, and the systemic effects unlocked per state (convoy routes, demand reductions). Plot-critical repairs (if any) use the same `plot_critical: bool` convention as bases.
+
 ---
 
 ## 6. Legitimacy & Collateral System
@@ -128,6 +145,7 @@ Each stage changes what's *mechanically available*, not just what's narratively 
 ### Stage 2 — Relief Logistics (Base Setup / Haulage)
 - Logistics missions: cargo weight cuts into range; aid demand outstrips lift capacity, forcing triage.
 - Player physically builds the FARP/aid-hub network relied on later — the "boring" relief infrastructure that becomes the war's operational backbone.
+- **Infrastructure repair unlocks here** (see Section 5): airlifting materials to broken bridges and blocked roads reopens ground convoy routes, converting the player's hand-flown supply legs into automated ground logistics — the stage's core investment decision (serve demand now vs. repair the route that removes the demand).
 - Legitimacy banking is at its cheapest here; the aid race with China's relief mission runs in the background.
 
 ### Stage 3 — The Turn (Suspicion & Shadow Recon → First Skirmishes)
@@ -173,7 +191,7 @@ Each step introduces exactly one new system before combining them. All three now
 - **Data flag recommendation:** forward bases should carry a `plot_critical: bool`. Losing a plot-critical base always triggers scripted narrative fallout; losing an optional one triggers only systemic fallout (reduced range, lost supply route, regional legitimacy hit).
 
 ### Side Missions
-- Primarily relief work: establishing optional aid hubs/FARPs, supply runs to cut-off settlements, rescue tasking — each easing main missions (extended range, faster resupply, better intel) *and* banking regional legitimacy.
+- Primarily relief work: establishing optional aid hubs/FARPs, supply runs to cut-off settlements, rescue tasking, and **infrastructure repair jobs** (hauling materials to a broken bridge or blocked pass so crews can fix it — see Section 5) — each easing main missions (extended range, faster resupply, reopened convoy routes, better intel) *and* banking regional legitimacy.
 - Fully optional by design — supports both a "rush the plot" playstyle and a "prepare thoroughly" playstyle without gating either. The prepared player enters the war with both an operational network and a goodwill buffer; the rushing player enters it lean on both.
 
 ---
@@ -213,6 +231,8 @@ Each step introduces exactly one new system before combining them. All three now
 
 **Disaster-state authoring (v2.0):** earthquake/flood damage is pre-authored world state — destroyed bridge variants, landslide meshes over roads, flood-scour texturing along river corridors, damaged-settlement prefab sets — not runtime destruction or fluid simulation. Aftershock/secondary-flood moments, if used, are scripted mission events. This keeps the disaster premise inside indie scope: it is level dressing plus mission logic, not a simulation layer.
 
+**Repairable-node authoring (v2.1):** repairable infrastructure is the same technique run in reverse — each node is a small set of discrete prefab states (damaged → under-repair → repaired) swapped as delivery thresholds are met, with engineer-crew dressing to sell the work happening between player visits. No construction animation systems, no incremental structural modeling. The systemic side (convoy-route availability, demand reduction) is data on the node, evaluated by the existing logistics/convoy layer rather than new machinery.
+
 **Known large risks to flag going into production:**
 - Real-terrain streaming/LOD at 150km scale is a nontrivial systems problem regardless of engine choice.
 - The command-layer AI (particularly "attack" behavior) is likely the single largest scope risk in the mission-structure design — recommend prototyping hold/defend AI first and treating attack-and-advance AI as a stretch goal until proven feasible within the indie-scope constraint.
@@ -229,6 +249,9 @@ Each step introduces exactly one new system before combining them. All three now
 - [ ] The aid race: is Chinese relief performance per-region simulated (even crudely) or scripted per campaign beat?
 - [ ] Joint-operations content in Stages 1–2: playable cooperative missions with Chinese aircraft, or ambient/narrative presence only? (Playable buys the betrayal more weight; ambient is far cheaper.)
 - [ ] Rescue mechanics depth: winch/hover interaction model, survivor representation, and how thin it can stay while still feeling like rescue
+- [ ] Infrastructure repair: delivery interaction (sling-load precision drop vs. land-and-unload vs. both by cargo type) — sling-load is the more SnowRunner-flavored skill expression but needs a physics rope; scope check required
+- [ ] Infrastructure repair: which node types beyond bridges/roads (helipads, power/comms relays?) and how many repairable nodes the map can support before authoring cost bites
+- [ ] Infrastructure repair: do enemy forces actively exploit player-repaired routes in Stages 4–5 (real AI pathing consequence) or is that reserved for scripted narrative beats?
 - [ ] FARP/aid-hub density and placement logic across the four biomes, accounting for vertical/altitude difficulty and disaster damage distribution, not just even spread
 - [ ] Fuel-burn formula (base rate + altitude modifier + load modifier + hover modifier + combat-state modifier)
 - [ ] Domestic Nepali political factions (pro-Quad / neutral / pro-China-leaning) — active mechanic or narrative flavor only?

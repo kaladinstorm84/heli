@@ -2,6 +2,14 @@
 
 Running log of changes to allow progress tracking between chat/dev sessions. Newest entries first.
 
+## 2026-09-03 — Spec v2.1: infrastructure repair ("assist") mechanic
+
+- Added an Infrastructure Repair subsection to `SPEC.md` §5: SnowRunner-flavored haulage of heavy repair materials to damaged infrastructure nodes (bridges, blocked roads, helipads); Nepali crews do the repair once supplied — player is the lifeline, not the builder.
+- Systemic payoffs: repaired routes enable/shorten ground convoy routes (existing convoy layer), reduce standing airlift demand, automate FARP resupply, and bank regional legitimacy. Late-game edge: repaired infrastructure is usable by the enemy and cuttable by armed groups.
+- Ripple edits: §2 disaster layer (repairable nodes as the exception to static damage), §7 Stage 2 (repair unlocks as the stage's core investment decision), §8 side missions (repair jobs), §11 (repairable-node authoring: discrete prefab state swaps, no construction sim), §12 (new open questions: sling-load vs land-and-unload delivery, node-type scope/count, enemy exploitation of repaired routes).
+- Data flag recommendation: `repair_state` (damaged/supplied/repaired) + material requirements + unlocked effects per node, reusing the `plot_critical` convention.
+- Updated `README.md` (spec version, new core-systems bullet). Docs-only change; no build to run.
+
 ## 2026-09-03 — Premise rework: spec v2.0 (disaster-relief opening)
 
 - Rewrote `SPEC.md` as v2.0 for the new premise: a massive earthquake devastates eastern Nepal (collapsed glacial lakes/reservoirs → flash floods and mudslides); the Quad and China both arrive as relief partners; cooperation holds until China is discovered fortifying the towns it is rebuilding.
@@ -27,7 +35,7 @@ Running log of changes to allow progress tracking between chat/dev sessions. New
 
 ## Current State
 
-- **Phase:** pre-production (design docs only), spec at v2.0 (disaster-relief premise).
+- **Phase:** pre-production (design docs only), spec at v2.1 (disaster-relief premise + infrastructure repair mechanic).
 - **Repo contents:** `SPEC.md`, `README.md`, `progress.md`, Unity `.gitignore`.
 - **Next candidate steps (not started):**
   - Resolve open questions in SPEC.md §12 (legitimacy accounting, escalation pacing, rescue mechanic depth, fuel-burn formula, finale scope, camera/command interaction rules).
