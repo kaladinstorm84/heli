@@ -28,6 +28,10 @@ An open-world, isometric helicopter rescue, logistics, and combat sim set in a r
 - **Disaster state:** pre-authored world damage (destroyed bridges, landslide-blocked roads, flood scour) plus scripted aftershock events — level dressing and mission logic, not a simulation layer.
 - **Flagged scope risks:** 150km terrain streaming/LOD; command-layer "attack" AI; rescue-interaction depth; aggregate system count. Fuel/logistics and the legitimacy loop are the must-ship systems; command sophistication, armed-groups-as-faction, and rescue depth are the first cut candidates.
 
+## Tools
+
+- [`tools/terrain/download_dem.py`](tools/terrain/download_dem.py) — downloads Copernicus GLO-30 elevation data for the project area (no account/API key needed), with presets for the playable box, the extended backdrop box, and the Teesta/Chungthang prototype slice; optionally exports a Unity-ready 16-bit RAW heightmap. See [tools/terrain/README.md](tools/terrain/README.md).
+
 ## Repository Status
 
-Pre-production. No Unity project has been created yet — the repository currently contains the design spec, this README, the progress log, and a Unity-ready `.gitignore`.
+Pre-production. No Unity project has been created yet — the repository currently contains the design spec, this README, the progress log, the DEM download tool, and a Unity-ready `.gitignore`.
