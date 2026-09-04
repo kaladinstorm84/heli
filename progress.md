@@ -2,6 +2,15 @@
 
 Running log of changes to allow progress tracking between chat/dev sessions. Newest entries first.
 
+## 2026-09-04 — DEM download tool (first code in the repo)
+
+- Added `tools/terrain/download_dem.py`: downloads Copernicus GLO-30 (30m) tiles from the public AWS Open Data mirror (no login/API key), caches them, merges/clips to a bounding box, and optionally exports a Unity-ready 16-bit little-endian RAW heightmap reprojected to UTM 45N with a JSON sidecar (extent, elevation range, import settings).
+- Presets matching SPEC.md §2: `playable` (150km box, 9 tiles), `extended` (backdrop margin for the converging-ceiling boundary), `prototype` (~12km Teesta bend/Chungthang slice for the hex-grid/silhouette test).
+- Added `tools/terrain/requirements.txt` (numpy, rasterio, requests) and `tools/terrain/README.md` (usage, Unity import notes incl. Flip Vertically and vertical compression, Copernicus data credit).
+- `.gitignore`: added `/data/` for downloaded DEM data.
+- **Tested end-to-end:** ran the `prototype` preset — 1 tile (42MB) downloaded, clipped GeoTIFF 432x396px, heightmap 1025x1025 verified (exact pixel count, full 16-bit range), elevation 1,298–4,589m over 12.0x12.3km (plausible for the Teesta gorge at Chungthang). Also verified 9-tile enumeration for `playable` via `--list-tiles`.
+- Updated `README.md` with a Tools section. Discussion context (not yet specced): considering Catlike Coding-style hex-grid terrain — the GeoTIFF output is the sampling source for that route; the RAW export serves the Unity-terrain route.
+
 ## 2026-09-03 — Spec v2.3: repair race pacing decided (progress-clocked, not wall-clocked)
 
 - Resolved the aid-race pacing question in `SPEC.md` §5/§12: China's repair queue must never advance on real time — an "X repairs per hour" model would punish exploration, careful flying, and side questing (pillar 1 violation).
@@ -51,8 +60,8 @@ Running log of changes to allow progress tracking between chat/dev sessions. New
 
 ## Current State
 
-- **Phase:** pre-production (design docs only), spec at v2.3 (disaster-relief premise + contested repair race with progress-clocked pacing).
-- **Repo contents:** `SPEC.md`, `README.md`, `progress.md`, Unity `.gitignore`.
+- **Phase:** pre-production, spec at v2.3 (disaster-relief premise + contested repair race with progress-clocked pacing). First tooling in place (DEM download).
+- **Repo contents:** `SPEC.md`, `README.md`, `progress.md`, `tools/terrain/` (DEM download tool), Unity `.gitignore`.
 - **Next candidate steps (not started):**
   - Resolve open questions in SPEC.md §12 (legitimacy accounting, escalation pacing, rescue mechanic depth, fuel-burn formula, finale scope, camera/command interaction rules).
   - Create the Unity project skeleton.
